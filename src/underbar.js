@@ -40,6 +40,9 @@ var _ = {};
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+  	return n === undefined ? array[array.length-1] : function(){
+  		return n > array.length ? array.slice(0) : array.slice(array.length-n);	
+  	}();
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -48,6 +51,15 @@ var _ = {};
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+  	if (collection.length === undefined){//is object, use for-in loop
+  		for (var property in collection){
+  			iterator(collection[property],property.toString(),collection);
+  		};	
+  	}else{//is array, use for-with-SC loop
+  		for (var element = 0; element < collection.length; element++){
+  			iterator(collection[element],element,collection);
+  		};
+  	}
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -68,17 +80,46 @@ var _ = {};
   };
 
   // Return all elements of an array that pass a truth test.
+  // Note to self: should return new array, with all the "passed" truthy elements pushed to it
   _.filter = function(collection, test) {
+  	var passed = [];
+  	_.each(collection, function(item, index, collection){
+  		if (test(item)===true){passed.push(item)};
+  		
+  	})
+  	return passed;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    /* Trying to use filter, not seeing a way to it that is more concise or faster. Maybe I should be looking at the extra arguments in forEach?
+    var failed = [];
+    _.each(_.filter(collection,test), function(item,index,collection){
+    	if (indexOf(collection,item) === -1){failed.push(item);};
+    	
+    });
+    return failed;
+    */
+    var failed = [];
+  	_.each(collection, function(item, index, collection){
+  		if (test(item)===false){failed.push(item)};
+  		
+  	})
+  	return failed;
   };
+  
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+  	var chkdElms = [];
+  	_.each(array,function(item, index, collection){
+  		if (_.indexOf(chkdElms, item) === -1){
+  			chkdElms.push(item)};
+  		
+  	});
+  	return chkdElms;
   };
 
 
