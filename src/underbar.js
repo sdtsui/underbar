@@ -187,6 +187,19 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+  	//initialValue and holderArr get changed with each call
+  	//each call hits every element of the array, with function iterator
+  	if (accumulator === undefined){//assigning initialValue
+  		var initialValue = collection[0];
+  	}else{//initialValue is specified
+  		var initialValue = accumulator
+  	};
+  	
+  	_.each(collection, function(item, index, collection){
+  		initialValue = iterator(initialValue,item);
+  	});
+  	
+  	return initialValue;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -204,13 +217,39 @@ var _ = {};
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
+  	if (iterator === undefined){
+  		iterator = _.identity;
+  	};
     // TIP: Try re-using reduce() here.
+    return _.reduce(collection, function(wasFound, item){
+      if (wasFound===false){
+    	return false;
+      }
+      if (iterator(item)){
+      	return true;
+      	}else{
+      		return false;
+      		}
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
+  	if (iterator === undefined){
+  		iterator = _.identity;
+  	}
+  	if (collection === []){
+  		return false;
+  	}
     // TIP: There's a very clever way to re-use every() here.
+    var results = _.map(collection, function(item){
+    	if (iterator(item)){
+    		return true
+    	}else {
+    		return false}
+    });
+    return _.contains(results,true);
   };
 
 
@@ -233,11 +272,26 @@ var _ = {};
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+  	_.each(arguments,function(item,index,collection){
+  	  _.each(item, function(item, index,collection){
+  	  	obj[index] = item;
+  	  });
+  	});
+  	return obj;
   };
+  
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+  	_.each(arguments,function(item,index,collection){
+  	  _.each(item, function(item, index,collection){
+  	  	if (obj.hasOwnProperty(index)===false){
+  	  		obj[index] = item;
+  	  	}
+  	  });
+  	});
+  	return obj;
   };
 
 
@@ -279,6 +333,21 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+  	var prevComputes = [];
+  	var prevResults = [];
+  	return function(){
+  		var argsIndex = _.indexOf(prevComputes,arguments[0]);
+  		var result;
+  		if (argsIndex === -1){
+  			result = func.apply(this,arguments);
+  			prevComputes.push(arguments[0]);
+  			prevResults.push(result);
+  			
+  		}else{
+  			result = prevResults[argsIndex];
+  		}
+		return result;  		
+  	};
   };
 
   // Delays a function for the given number of milliseconds, and then calls
