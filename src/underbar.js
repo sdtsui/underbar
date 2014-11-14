@@ -357,6 +357,17 @@ var _ = {};
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+  	var args= [];
+  	if (arguments.length >2){//extra args, need to create array
+  		for (var i =2; i<arguments.length;i++ ){
+  			args[i-2] = arguments[i];	
+  		}
+  	} else{//no extra args
+  		args = undefined;
+  	}
+  	window.setTimeout(function(){
+  		func.apply(null,args);
+  	},wait);
   };
 
 
@@ -370,7 +381,14 @@ var _ = {};
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+  //Note to self, this is barely pseudo-random.
+  //Perhaps a long way to do this would be to slice a bunch of times on an array that was getting elements popped into a holder?
+  //Please look at the actual implementation later to learn more! 
   _.shuffle = function(array) {
+  	var randoCut = Math.floor(Math.random()*(array.length-1));
+  	var elements1 = array.slice(randoCut);
+  	var elements2 = array.slice(0,randoCut).reverse();
+  	return elements1.concat(elements2).reverse();
   };
 
 
