@@ -215,7 +215,7 @@ describe('reduce', function() {
 
     expect(total).to.equal(6);
   });
-  
+
   it('should default to the first item in the array', function() {
     var add = function(tally, item) {return tally + item; };
     var total = _.reduce([1, 2, 3], add);
@@ -439,6 +439,15 @@ describe('once', function() {
     increment();
 
     expect(num).to.equal(1);
+  });
+it('should handle extra callback arguments', function() {
+    var num = 0 ;
+    var addTwoThings = _.once(function(a,b) {
+      return a+b;
+    });
+
+    num = addTwoThings(1,2);
+    expect(num).to.equal(3);
   });
 });
 

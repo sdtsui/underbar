@@ -41,7 +41,7 @@ var _ = {};
   // last element.
   _.last = function(array, n) {
   	return n === undefined ? array[array.length-1] : function(){
-  		return n > array.length ? array.slice(0) : array.slice(array.length-n);	
+  		return n > array.length ? array.slice(0) : array.slice(array.length-n);
   	}();
   };
 
@@ -54,7 +54,7 @@ var _ = {};
   	if (collection.length === undefined){//is object, use for-in loop
   		for (var property in collection){
   			iterator(collection[property],property.toString(),collection);
-  		};	
+  		};
   	}else{//is array, use for-with-SC loop
   		for (var element = 0; element < collection.length; element++){
   			iterator(collection[element],element,collection);
@@ -85,7 +85,7 @@ var _ = {};
   	var passed = [];
   	_.each(collection, function(item, index, collection){
   		if (test(item)===true){passed.push(item)};
-  		
+
   	})
   	return passed;
   };
@@ -98,18 +98,18 @@ var _ = {};
     var failed = [];
     _.each(_.filter(collection,test), function(item,index,collection){
     	if (indexOf(collection,item) === -1){failed.push(item);};
-    	
+
     });
     return failed;
     */
     var failed = [];
   	_.each(collection, function(item, index, collection){
   		if (test(item)===false){failed.push(item)};
-  		
+
   	})
   	return failed;
   };
-  
+
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
@@ -117,7 +117,7 @@ var _ = {};
   	_.each(array,function(item, index, collection){
   		if (_.indexOf(chkdElms, item) === -1){
   			chkdElms.push(item)};
-  		
+
   	});
   	return chkdElms;
   };
@@ -161,17 +161,18 @@ var _ = {};
 	if(typeof(functionOrKey)==='function'){//is a function
 		return _.map(collection, function(item,index,collection){
 			return functionOrKey.apply(item,args);
-			
+
 		});
 	};
 	if(typeof(functionOrKey)==='string'){//is a function
 		return _.map(collection, function(item,index,collection){
 			return item[functionOrKey]();
-			
+
 		});
 	};
-  	};
-  
+  	};
+
+
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
@@ -194,11 +195,11 @@ var _ = {};
   	}else{//initialValue is specified
   		var initialValue = accumulator
   	};
-  	
+
   	_.each(collection, function(item, index, collection){
   		initialValue = iterator(initialValue,item);
   	});
-  	
+
   	return initialValue;
   };
 
@@ -279,7 +280,7 @@ var _ = {};
   	});
   	return obj;
   };
-  
+
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
@@ -342,11 +343,11 @@ var _ = {};
   			result = func.apply(this,arguments);
   			prevComputes.push(arguments[0]);
   			prevResults.push(result);
-  			
+
   		}else{
   			result = prevResults[argsIndex];
   		}
-		return result;  		
+		return result;
   	};
   };
 
@@ -360,7 +361,7 @@ var _ = {};
   	var args= [];
   	if (arguments.length >2){//extra args, need to create array
   		for (var i =2; i<arguments.length;i++ ){
-  			args[i-2] = arguments[i];	
+  			args[i-2] = arguments[i];
   		}
   	} else{//no extra args
   		args = undefined;
@@ -383,7 +384,7 @@ var _ = {};
   // http://mdn.io/Array.prototype.slice
   //Note to self, this is barely pseudo-random.
   //Perhaps a long way to do this would be to slice a bunch of times on an array that was getting elements popped into a holder?
-  //Please look at the actual implementation later to learn more! 
+  //Please look at the actual implementation later to learn more!
   _.shuffle = function(array) {
   	var randoCut = Math.floor(Math.random()*(array.length-1));
   	var elements1 = array.slice(randoCut);
